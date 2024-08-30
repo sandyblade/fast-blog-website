@@ -16,7 +16,6 @@ itsdangerous
 Jinja2
 MarkupSafe
 orjson
-psycopg2
 pycodestyle
 pydantic
 python-dotenv

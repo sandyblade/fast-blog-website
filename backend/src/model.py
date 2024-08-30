@@ -77,7 +77,8 @@ class Article(Base):
     created_at = Column(DateTime, index=True, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, index=True, default=datetime.datetime.utcnow)
     user = relationship("User", back_populates="articles")
-    viewers = relationship("Viewer", back_populates="user")
+    viewers = relationship("Viewer", back_populates="article")
+    comments = relationship("Comment", back_populates="article")
     
 class Comment(Base):
     __tablename__ = 'comments'
@@ -90,7 +91,7 @@ class Comment(Base):
     message = Column(Text(), nullable=True)
     created_at = Column(DateTime, index=True, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, index=True, default=datetime.datetime.utcnow)
-    article = relationship("Article", back_populates="viewers")
+    article = relationship("Article", back_populates="comments")
     user = relationship("User", back_populates="comments")
     parent = relationship("Comment", backref='comments',remote_side=[id])
     

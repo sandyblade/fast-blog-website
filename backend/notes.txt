@@ -3,7 +3,8 @@ fastapi dev main.py
 uvicorn main:app --reload
 
 # Install Dependencies
-pip install -r requirements.txt or pip3 install -r requirements.txt
+sudo apt-get install pkg-config python3-dev default-libmysqlclient-dev build-essential
+pip install -r requirements.txt or pip3 install -r requirements.txt --break-system-packages
 
 # Generate Key Generate
 openssl rand -hex 32
