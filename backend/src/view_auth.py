@@ -1,3 +1,14 @@
+"""
+ * This file is part of the Sandy Andryanto Blog Application.
+ *
+ * @author     Sandy Andryanto <sandy.andryanto.blade@gmail.com>
+ * @copyright  2024
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE.md file that was distributed
+ * with this source code.
+"""
+
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -23,6 +34,7 @@ def auth_login(user: UserLoginSchema, db: Session = Depends(get_db)):
     
     if auth_user != None:
         
+        date_now = datetime.datetime.now()
         user_password = auth_user.password
         pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         verify = pwd_context.verify(user.password, user_password)
@@ -35,6 +47,16 @@ def auth_login(user: UserLoginSchema, db: Session = Depends(get_db)):
         verification = db.query(User).filter(and_(User.email == user.email, User.confirmed == 1)).count()
         if verification == 0:
             return JSONResponse(content="We have sent you an email confirmation. Please confirm your email and then we will active your account.", status_code=401)
+        
+        activity = Activity(
+            user = auth_user,
+            event = "Sign In",
+            description = "Sign in to application",
+            created_at = date_now,
+            updated_at = date_now,
+        )
+        db.add(activity)
+        db.commit()
         
         return signJWT(auth_user.email)
         
@@ -65,13 +87,21 @@ def auth_register(user: UserRegisterSchema, db: Session = Depends(get_db)):
     new_user = User(
         email = user.email,
         password = hash_password,
-        confirm_token = str(uuid.uuid4()),
         updated_at = date_now,
-        confirmed = 0
+        confirmed = 1
     )
     db.add(new_user)
     db.commit()
-    db.add(new_user)
+
+    activity = Activity(
+        user = new_user,
+        event = "Sign Up",
+        description = "Register new user account",
+        created_at = date_now,
+        updated_at = date_now,
+    )
+    db.add(activity)
+    db.commit()
 
     return JSONResponse(content="Your account has been created. Please check your email for the confirmation message we just sent you.", status_code=200)
 
@@ -91,6 +121,17 @@ def auth_confirm(token: str, db: Session = Depends(get_db)):
     }
     db.query(User).filter(User.id == user.id).update(update_user, synchronize_session=False)
     db.commit()
+    
+    activity = Activity(
+        user = user,
+        event = "Email Verification",
+        description = "Confirm new member registration account",
+        created_at = date_now,
+        updated_at = date_now,
+    )
+    db.add(activity)
+    db.commit()
+    
     db.refresh(user)
     
     return JSONResponse(content="Your registration is complete. Now you can login.", status_code=200)
@@ -113,6 +154,17 @@ def auth_email_forgot(user: UserForgotSchema, db: Session = Depends(get_db)):
         }
         db.query(User).filter(User.id == auth_user.id).update(update_user, synchronize_session=False)
         db.commit()
+        
+        activity = Activity(
+            user = auth_user,
+            event = "Forgot Password",
+            description = "Request reset password link",
+            created_at = date_now,
+            updated_at = date_now,
+        )
+        db.add(activity)
+        db.commit()
+        
         db.refresh(auth_user)
         
         return JSONResponse(content="An email has been sent to "+user.email+" with further password reset information. Thank you.", status_code=200)
@@ -124,13 +176,14 @@ def auth_email_forgot(user: UserForgotSchema, db: Session = Depends(get_db)):
 def auth_email_reset(token: str, user: UserResetSchema, db: Session = Depends(get_db)):
     
     auth_user = db.query(User).filter(User.email == user.email).first()
+    date_now = datetime.datetime.now()
     
     if auth_user != None:
         
         # Check Reset Token
         password_reset = db.query(User).filter(and_(User.email == user.email, User.reset_token == token, User.reset_token != None)).count()
         if password_reset == 0:
-            return JSONResponse(content="We have sent you an email confirmation. Please confirm your email and then we will active your account.", status_code=401)
+            return JSONResponse(content="We can't find a user with that e-mail address or password reset token is invalid.", status_code=400)
         
         if user.password != user.password_confirm:
             return JSONResponse(content="Please make sure your passwords match.", status_code=400)
@@ -154,6 +207,17 @@ def auth_email_reset(token: str, user: UserResetSchema, db: Session = Depends(ge
         
         db.query(User).filter(User.id == auth_user.id).update(update_user, synchronize_session=False)
         db.commit()
+        
+        activity = Activity(
+            user = auth_user,
+            event = "Reset Password",
+            description = "Reset account password",
+            created_at = date_now,
+            updated_at = date_now,
+        )
+        db.add(activity)
+        db.commit()
+        
         db.refresh(auth_user)
         
         return JSONResponse(content="You have successfully updated your password.", status_code=200)

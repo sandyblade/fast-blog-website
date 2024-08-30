@@ -13,6 +13,7 @@ from src.model import *
 from src.database import engine, Base
 from src import database
 from src.view_auth import auth_route
+from src.view_account import account_route
 from src.seed import Seed
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,4 +25,5 @@ seed.run()
 
 app = FastAPI()
 app.include_router(auth_route)
+app.include_router(account_route)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])

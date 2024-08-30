@@ -27,3 +27,23 @@ class UserRegisterSchema(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8)
     password_confirm: str = Field(..., min_length=8)
+    
+class UserProfileSchema(BaseModel):
+    email: EmailStr
+    phone: str = Field(..., min_length=7)
+    first_name: str = Field(..., min_length=3)
+    last_name: str = Field(..., min_length=3)
+    gender: str = Field(..., min_length=1)
+    address: str
+    country: str
+    instagram: str
+    facebook: str
+    twitter: str
+    linked_in: str
+    job_title: str
+    about_me: str
+    
+class UserPasswordSchema(BaseModel):
+    current_password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8)
+    password_confirm: str = Field(..., min_length=8)

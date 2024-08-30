@@ -89,3 +89,5 @@ __pycache__
 venv/
 .env
 *.db
+uploads
+files
