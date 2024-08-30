@@ -47,4 +47,3 @@ cbfa
 password-strength
 jinja2
 importmonkey
-schedschedule

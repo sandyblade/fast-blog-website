@@ -1,21 +1,21 @@
-from src.models.model_auth import *
-from src.models.model_reference import *
-from src.models.model_core import *
-from src.configs.database import engine
-from src.configs import database
-from src.data.seeds import Seed
-from src.views.view_account import *
-from src.views.view_auth import *
+"""
+ * This file is part of the Sandy Andryanto Blog Application.
+ *
+ * @author     Sandy Andryanto <sandy.andryanto404@gmail.com>
+ * @copyright  2024
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE.md file that was distributed
+ * with this source code.
+"""
+
+from src.model import *
+from src.database import engine, Base
+from src import database
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
-database.Base.metadata.create_all(bind=engine)
-
-seed = Seed()
-seed.run()
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-app.include_router(view_account)
-app.include_router(view_auth)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
