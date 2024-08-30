@@ -17,11 +17,14 @@ from src.view_account import account_route
 from src.seed import Seed
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
 Base.metadata.create_all(bind=engine)
 
 seed = Seed()
 seed.run()
+
+Path("uploads").mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
 app.include_router(auth_route)

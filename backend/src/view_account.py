@@ -9,10 +9,11 @@
  * with this source code.
 """
 
-from fastapi import APIRouter, Depends,  Security
+from fastapi import APIRouter, Depends, Security, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.encoders import jsonable_encoder
+from typing import Annotated
 from sqlalchemy import or_, and_
 from sqlalchemy.orm import Session
 from password_strength import PasswordPolicy
@@ -23,6 +24,10 @@ from .auth import auth_user, signJWT
 from .database import get_db
 from .schema import *
 from .model import *
+
+import shutil
+import uuid
+import pathlib
 
 account_route = APIRouter()
 security = HTTPBearer()
@@ -121,6 +126,48 @@ def account_profile_update(user: UserProfileSchema, db: Session = Depends(get_db
     
     return JSONResponse(content=jsonable_encoder(payload), status_code=200)
     
+
+@account_route.post("/api/account/upload",  dependencies=[Depends(JWTBearer())], tags=["account_upload"])
+def account_upload(file_image: UploadFile = File(...), db: Session = Depends(get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
+    
+    date_now = datetime.datetime.now()
+    access_token = credentials.credentials
+    session = auth_user(access_token)
+    image = session["image"]
+    user_id = session["id"]
+    session_user = db.query(User).filter(User.id == user_id).first()
+    
+    ext = file_image.filename.split(".")[-1]
+    file_name = str(uuid.uuid4())
+    path = f"uploads/{file_name}.{ext}"
+    with open(path, 'w+b') as file:
+        shutil.copyfileobj(file_image.file, file)
+        
+        if image != None:
+            pathlib.Path(f"./{image}").unlink(missing_ok=True)
+        
+        image = path
+        
+    update_user = { 'image': image,  'updated_at' : date_now }
+    db.query(User).filter(User.id == user_id).update(update_user, synchronize_session=False)
+    db.commit()
+    
+    activity = Activity(
+        user = session_user,
+        event = "Upload Profile Image",
+        description = "Upload new user profile image",
+        created_at = date_now,
+        updated_at = date_now,
+    )
+    db.add(activity)
+    db.commit()
+    
+    payload = {
+        "image": image,
+        "message": "Your profile image has been changed"
+    }
+    
+    return JSONResponse(content=jsonable_encoder(payload), status_code=200)
 
 @account_route.post("/api/account/password",  dependencies=[Depends(JWTBearer())], tags=["account_password"])
 def account_password(user: UserPasswordSchema, db: Session = Depends(get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
