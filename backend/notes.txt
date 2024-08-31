@@ -4,6 +4,7 @@ uvicorn main:app --reload
 
 # Install Dependencies
 sudo apt-get install pkg-config python3-dev default-libmysqlclient-dev build-essential
+pip install "fastapi[standard]"
 pip install -r requirements.txt or pip3 install -r requirements.txt --break-system-packages
 
 # Generate Key Generate

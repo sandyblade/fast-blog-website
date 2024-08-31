@@ -14,6 +14,8 @@ from src.database import engine, Base
 from src import database
 from src.view_auth import auth_route
 from src.view_account import account_route
+from src.view_notification import notification_route
+from src.view_article import article_route
 from src.seed import Seed
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,4 +31,6 @@ Path("uploads").mkdir(parents=True, exist_ok=True)
 app = FastAPI()
 app.include_router(auth_route)
 app.include_router(account_route)
+app.include_router(notification_route)
+app.include_router(article_route)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])

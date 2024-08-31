@@ -46,3 +46,6 @@ cbfa
 password-strength
 jinja2
 importmonkey
+PyJWT
+bcrypt==3.2.2
+jsonpickle

@@ -10,6 +10,7 @@
 """
 
 from pydantic import BaseModel, EmailStr, Field
+from typing import List
 
 class UserLoginSchema(BaseModel):
     email: EmailStr
@@ -47,3 +48,11 @@ class UserPasswordSchema(BaseModel):
     current_password: str = Field(..., min_length=8)
     password: str = Field(..., min_length=8)
     password_confirm: str = Field(..., min_length=8)
+    
+class ArticleSchema(BaseModel):
+    title: str = Field(..., min_length=7)
+    description: str = Field(..., min_length=10)
+    content: str = Field(..., min_length=10)
+    status: int
+    categories: List[str]
+    tags: List[str]

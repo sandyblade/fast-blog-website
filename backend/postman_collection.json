@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "0e55f085-9e61-4ed7-aca3-518c49181d1a",
+		"_postman_id": "febdb1b3-47d6-40c9-afd8-0baa1a4057ef",
 		"name": "Fast REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "17401019"
+		"_exporter_id": "20338099"
 	},
 	"item": [
 		{
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"josianne06@example.net\",\r\n    \"password\":\"P@ssw0rd!123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"ngallegos@example.com\",\r\n    \"password\":\"P@ssw0rd!123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -386,7 +386,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"What is Lorem Ipsum 3\",\r\n    \"description\":\"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s\",\r\n    \"content\":\"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\",\r\n    \"status\": 1,\r\n    \"categories\":[\"Sport\",\"News\",\"Technology\",\"Culinary\",\"Politic\",\"Economic\"],\r\n    \"tags\":[\"Favorite\",\"Hot News\",\"Best Seller\"]\r\n}",
+							"raw": "{\r\n    \"title\": \"What is Lorem Ipsum 7\",\r\n    \"description\":\"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s\",\r\n    \"content\":\"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\",\r\n    \"status\": 1,\r\n    \"categories\":[\"Sport\",\"News\",\"Technology\",\"Culinary\",\"Politic\",\"Economic\"],\r\n    \"tags\":[\"Favorite\",\"Hot News\",\"Best Seller\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -412,14 +412,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}api/article/read/what-is-lorem-ipsum-3",
+							"raw": "{{baseURL}}api/article/read/what-is-lorem-ipsum-1",
 							"host": [
 								"{{baseURL}}api"
 							],
 							"path": [
 								"article",
 								"read",
-								"what-is-lorem-ipsum-3"
+								"what-is-lorem-ipsum-1"
 							]
 						}
 					},
@@ -459,14 +459,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}api/article/remove/2",
+							"raw": "{{baseURL}}api/article/remove/8",
 							"host": [
 								"{{baseURL}}api"
 							],
 							"path": [
 								"article",
 								"remove",
-								"2"
+								"8"
 							]
 						}
 					},
@@ -496,7 +496,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}api/article/words?max=1000",
+							"raw": "{{baseURL}}api/article/words?max=10",
 							"host": [
 								"{{baseURL}}api"
 							],
@@ -507,7 +507,7 @@
 							"query": [
 								{
 									"key": "max",
-									"value": "1000"
+									"value": "10"
 								}
 							]
 						}
@@ -519,14 +519,25 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file_image",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "{{baseURL}}api/article/upload",
+							"raw": "{{baseURL}}api/article/upload/2",
 							"host": [
 								"{{baseURL}}api"
 							],
 							"path": [
 								"article",
-								"upload"
+								"upload",
+								"2"
 							]
 						}
 					},
@@ -611,7 +622,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3MjQ2NTc5NzgsImV4cCI6MTcyNDY2MTU3OCwibmJmIjoxNzI0NjU3OTc4LCJqdGkiOiJsYmluYUNaRXh1UkNScXFlIiwic3ViIjoiNSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WhYifr0aAizf3ira7RRwgaqADkXkcp2omxyFo9_20j8",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJuZ2FsbGVnb3NAZXhhbXBsZS5jb20iLCJleHBpcmVzIjoxMDcyNTAzMTgzMS44MzE0MTd9.MbRVDNbqpRYXehGb6nIqs_uiI39yEKiz3eZRAh10fjU",
 				"type": "string"
 			}
 		]
