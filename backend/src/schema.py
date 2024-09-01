@@ -35,14 +35,14 @@ class UserProfileSchema(BaseModel):
     first_name: str = Field(..., min_length=3)
     last_name: str = Field(..., min_length=3)
     gender: str = Field(..., min_length=1)
-    address: str
-    country: str
-    instagram: str
-    facebook: str
-    twitter: str
-    linked_in: str
-    job_title: str
-    about_me: str
+    address: str | None = None
+    country: str | None = None
+    instagram: str | None = None
+    facebook: str | None = None
+    twitter: str | None = None
+    linked_in: str | None = None
+    job_title: str | None = None
+    about_me: str | None = None
     
 class UserPasswordSchema(BaseModel):
     current_password: str = Field(..., min_length=8)
@@ -54,5 +54,9 @@ class ArticleSchema(BaseModel):
     description: str = Field(..., min_length=10)
     content: str = Field(..., min_length=10)
     status: int
-    categories: List[str]
-    tags: List[str]
+    categories: List[str] | None = None
+    tags: List[str] | None = None
+    
+class ArticleCommentSchema(BaseModel):
+    comment: str = Field(..., min_length=10)
+    parent_id: int | None = None

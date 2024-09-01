@@ -56,7 +56,7 @@ def article_list(
         ))
         
     data = data.limit(limit).offset(offset)
-    results = db.execute(data).all()
+    results = data.all()
     articles = []
     
     for row in results:
@@ -144,9 +144,22 @@ def article_read(slug: str, credentials: HTTPAuthorizationCredentials = Security
     if not article:
         return JSONResponse(content=f"Article with slug {slug} was not found.!!", status_code=400)
     
-    total = db.query(Viewer).filter(and_(Viewer.article == article, Viewer.user != session_user)).count()
+    total = db.query(Viewer).filter(and_(Viewer.article == article, Viewer.user == session_user)).count()
     
     if total == 0:
+        
+        viewer = Viewer(
+            article = article,
+            user = session_user,
+            created_at = date_now,
+            updated_at = date_now,
+        )
+        db.add(viewer)
+        db.commit()
+        
+        db.query(Article).filter(Article.id == article.id).update({ 'total_viewer': (article.total_viewer + 1), 'updated_at': date_now }, synchronize_session=False)
+        db.commit()
+        
         activity = Activity(
             user = session_user,
             event = "Read Article",
